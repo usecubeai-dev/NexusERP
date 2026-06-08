@@ -14,13 +14,13 @@ export type ProductLaunchProps = {
 
 export const productLaunchDefaultProps: ProductLaunchProps = {
 	productName: 'NexusERP',
-	tagline: 'Unify your business. Amplify your growth.',
+	tagline: 'Unifique seu negócio. Amplifique seu crescimento.',
 	accentColor: '#6366f1',
 	backgroundColor: '#0f0f1a',
 	stats: [
-		{label: 'Faster Invoicing', value: '3×', color: '#6366f1'},
-		{label: 'Cost Reduction', value: '40%', color: '#22d3ee'},
-		{label: 'Integrations', value: '120+', color: '#f472b6'},
-		{label: 'Uptime SLA', value: '99.9%', color: '#4ade80'},
+		{label: 'Faturamento mais rápido', value: '3×', color: '#6366f1'},
+		{label: 'Redução de custos', value: '40%', color: '#22d3ee'},
+		{label: 'Integrações', value: '120+', color: '#f472b6'},
+		{label: 'SLA de disponibilidade', value: '99,9%', color: '#4ade80'},
 	],
 };

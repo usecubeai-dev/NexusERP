@@ -114,7 +114,7 @@ export const StatsScene: React.FC<Props> = ({stats, accentColor}) => {
 						textTransform: 'uppercase',
 					}}
 				>
-					By the numbers
+					Em números
 				</div>
 				<div
 					style={{
@@ -124,7 +124,7 @@ export const StatsScene: React.FC<Props> = ({stats, accentColor}) => {
 						letterSpacing: '-1px',
 					}}
 				>
-					Results that matter
+					Resultados que importam
 				</div>
 			</div>
 

@@ -99,7 +99,7 @@ export const ClosingScene: React.FC<Props> = ({productName, accentColor}) => {
 						letterSpacing: '1px',
 					}}
 				>
-					Start your free trial today
+					Comece seu teste gratuito hoje
 				</div>
 				<div
 					style={{

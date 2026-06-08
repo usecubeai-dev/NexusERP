@@ -1,12 +1,12 @@
-# Remotion Video App
+# Aplicativo de Vídeo com Remotion
 
-This is a remotion based video app that uses React to render videos.
+Este é um aplicativo de vídeo baseado em Remotion que usa React para renderizar vídeos.
 
-Full remotion docs can be found here: https://www.remotion.dev/docs/. Consult these docs often if you're uncertain.
+A documentação completa do Remotion está disponível em: https://www.remotion.dev/docs/. Consulte com frequência em caso de dúvidas.
 
-### Project Structure
+### Estrutura do Projeto
 
-The Root file is usually named "src/Root.tsx" and looks like this:
+O arquivo raiz geralmente se chama "src/Root.tsx" e tem a seguinte aparência:
 
 ```
 import {Composition} from 'remotion';
@@ -29,22 +29,22 @@ export const Root: React.FC = () => {
 };
 ```
 
-A `<Composition>` defines a video that can be rendered. It consists of a React "component", an "id", a "durationInFrames", a "width", a "height" and a frame rate "fps". The default frame rate should be 30. The default height should be 1080 and the default width should be 1920. The default "id" should be "MyComp". The "defaultProps" must be in the shape of the React props the "component" expects.
+Um `<Composition>` define um vídeo que pode ser renderizado. Ele é composto por um React "component", um "id", um "durationInFrames", um "width", um "height" e uma taxa de quadros "fps". A taxa de quadros padrão deve ser 30. A altura padrão deve ser 1080 e a largura padrão deve ser 1920. O "id" padrão deve ser "MyComp". O "defaultProps" deve ter o formato das props React que o "component" espera.
 
-Inside a React "component", one can use the "useCurrentFrame()" hook to get the current frame number. Frame numbers start at 0.
+Dentro de um React "component", é possível usar o hook "useCurrentFrame()" para obter o número do quadro atual. A numeração dos quadros começa em 0.
 
 ```
 export const MyComp: React.FC = () => {
 	const frame = useCurrentFrame();
-	return <div>Frame {frame}</div>;
+	return <div>Quadro {frame}</div>;
 };
 ```
 
-### Component Rules
+### Regras de Componentes
 
-Inside a component, regular HTML and SVG tags can be returned. There are special tags for video and audio. Those special tags accept regular CSS styles.
+Dentro de um componente, é possível retornar tags HTML e SVG normais. Existem tags especiais para vídeo e áudio. Essas tags especiais aceitam estilos CSS normais.
 
-If a video is included in the component it should use the `<OffthreadVideo>` tag.
+Se um vídeo for incluído no componente, deve-se usar a tag `<OffthreadVideo>`.
 
 ```
 import {OffthreadVideo} from 'remotion';
@@ -61,9 +61,9 @@ export const MyComp: React.FC = () => {
 };
 ```
 
-OffthreadVideo has a "startFrom" prop that trims the left side of a video by a number of frames. OffthreadVideo has a "endAt" prop that limits how long a video is shown. OffthreadVideo has a "volume" prop that sets the volume of the video. It accepts values between 0 and 1.
+OffthreadVideo possui uma prop "startFrom" que corta o início de um vídeo por um número de quadros. OffthreadVideo possui uma prop "endAt" que limita por quanto tempo o vídeo é exibido. OffthreadVideo possui uma prop "volume" que define o volume do vídeo. Aceita valores entre 0 e 1.
 
-If a non-animated image is included in the component it should use the `<Img>` tag.
+Se uma imagem não animada for incluída no componente, deve-se usar a tag `<Img>`.
 
 ```
 import {Img} from 'remotion';
@@ -73,7 +73,7 @@ export const MyComp: React.FC = () => {
 };
 ```
 
-If an animated GIF is included, the "@remotion/gif" package should be installed and the `<Gif>` tag should be used.
+Se um GIF animado for incluído, o pacote "@remotion/gif" deve ser instalado e a tag `<Gif>` deve ser usada.
 
 ```
 import {Gif} from '@remotion/gif';
@@ -88,7 +88,7 @@ export const MyComp: React.FC = () => {
 };
 ```
 
-If audio is included, the `<Audio>` tag should be used.
+Se áudio for incluído, deve-se usar a tag `<Audio>`.
 
 ```
 import {Audio} from 'remotion';
@@ -98,7 +98,7 @@ export const MyComp: React.FC = () => {
 };
 ```
 
-Asset sources can be specified as either a Remote URL or an asset that is referenced from the "public/" folder of the project. If an asset is referenced from the "public/" folder, it should be specified using the "staticFile" API from Remotion
+As fontes dos assets podem ser especificadas como uma URL remota ou como um asset referenciado da pasta "public/" do projeto. Se um asset for referenciado da pasta "public/", deve-se especificá-lo usando a API "staticFile" do Remotion.
 
 ```
 import {Audio, staticFile} from 'remotion';
@@ -108,9 +108,9 @@ export const MyComp: React.FC = () => {
 };
 ```
 
-Audio has a "startFrom" prop that trims the left side of an audio by a number of frames. Audio has a "endAt" prop that limits how long audio is shown. Audio has a "volume" prop that sets the volume of the audio. It accepts values between 0 and 1.
+O áudio possui uma prop "startFrom" que corta o início do áudio por um número de quadros. O áudio possui uma prop "endAt" que limita por quanto tempo o áudio é reproduzido. O áudio possui uma prop "volume" que define o volume. Aceita valores entre 0 e 1.
 
-If two elements should be rendered on top of each other, they should be layered using the "AbsoluteFill" component from "remotion".
+Se dois elementos precisam ser renderizados um sobre o outro, eles devem ser sobrepostos usando o componente "AbsoluteFill" do "remotion".
 
 ```
 import {AbsoluteFill} from 'remotion';
@@ -119,17 +119,17 @@ export const MyComp: React.FC = () => {
 	return (
 		<AbsoluteFill>
 			<AbsoluteFill style={{background: 'blue'}}>
-				<div>This is in the back</div>
+				<div>Este fica atrás</div>
 			</AbsoluteFill>
 			<AbsoluteFill style={{background: 'blue'}}>
-				<div>This is in front</div>
+				<div>Este fica na frente</div>
 			</AbsoluteFill>
 		</AbsoluteFill>
 	);
 };
 ```
 
-Any element can be wrapped in a "Sequence" component from "remotion" to place the element later in the video.
+Qualquer elemento pode ser envolvido em um componente "Sequence" do "remotion" para posicioná-lo mais tarde no vídeo.
 
 ```
 import {Sequence} from 'remotion';
@@ -137,19 +137,19 @@ import {Sequence} from 'remotion';
 export const MyComp: React.FC = () => {
 	return (
 		<Sequence from={10} durationInFrames={20}>
-			<div>This only appears after 10 frames</div>
+			<div>Este só aparece após 10 quadros</div>
 		</Sequence>
 	);
 };
 ```
 
-A Sequence has a "from" prop that specifies the frame number where the element should appear. The "from" prop can be negative, in which case the Sequence will start immediately but cut off the first "from" frames.
+A Sequence possui uma prop "from" que especifica o número do quadro onde o elemento deve aparecer. A prop "from" pode ser negativa; nesse caso, a Sequence começa imediatamente, mas corta os primeiros "from" quadros.
 
-A Sequence has a "durationInFrames" prop that specifies how long the element should appear.
+A Sequence possui uma prop "durationInFrames" que especifica por quantos quadros o elemento deve aparecer.
 
-If a child component of Sequence calls "useCurrentFrame()", the enumeration starts from the first frame the Sequence appears and starts at 0.
+Se um componente filho de Sequence chamar "useCurrentFrame()", a contagem começa a partir do primeiro quadro em que a Sequence aparece, iniciando em 0.
 
-For displaying multiple elements after another, the "Series" component from "remotion" can be used.
+Para exibir múltiplos elementos em sequência, o componente "Series" do "remotion" pode ser usado.
 
 ```
 import {Series} from 'remotion';
@@ -158,21 +158,21 @@ export const MyComp: React.FC = () => {
 	return (
 		<Series>
 			<Series.Sequence durationInFrames={20}>
-				<div>This only appears immediately</div>
+				<div>Este aparece imediatamente</div>
 			</Series.Sequence>
 			<Series.Sequence durationInFrames={30}>
-				<div>This only appears after 20 frames</div>
+				<div>Este aparece após 20 quadros</div>
 			</Series.Sequence>
 		</Series>
 	);
 };
 ```
 
-For transitions, the "TransitionSeries" component from "@remotion/transitions" can be used.
+Para transições, o componente "TransitionSeries" do "@remotion/transitions" pode ser usado.
 
-Remotion needs all of the React code to be deterministic. Therefore, it is forbidden to use the Math.random() API. Use the "random()" function from "remotion" with a static seed instead.
+O Remotion exige que todo o código React seja determinístico. Portanto, é proibido usar a API Math.random(). Use a função "random()" do "remotion" passando uma semente estática.
 
-Remotion includes an `interpolate()` helper that can animate values over time:
+O Remotion inclui um helper `interpolate()` para animar valores ao longo do tempo:
 
 ```
 import {interpolate} from 'remotion';
@@ -183,7 +183,7 @@ const value = interpolate(frame, [0, 100], [0, 1], {
 });
 ```
 
-Remotion includes a `spring()` helper for physics-based animations:
+O Remotion inclui um helper `spring()` para animações baseadas em física:
 
 ```
 import {spring} from 'remotion';
@@ -195,13 +195,13 @@ const value = spring({
 });
 ```
 
-### Making UI Components
+### Criando Componentes de UI
 
-Remotion components are fundamentally different from normal interactive React components:
+Os componentes Remotion são fundamentalmente diferentes dos componentes React interativos normais:
 
-- Are rendered frame-by-frame to create videos
-- Cannot have user interactions (no onClick, onHover, etc.)
-- Cannot use hooks like useState for interactivity
-- Must be deterministic — same input always produces same output
-- Animations are driven by the current frame number
-- Avoid useEffect — calculations should be pure based on frame
+- São renderizados quadro a quadro para criar vídeos
+- Não podem ter interações do usuário (sem onClick, onHover, etc.)
+- Não podem usar hooks como useState para interatividade
+- Devem ser determinísticos — a mesma entrada sempre produz a mesma saída
+- As animações são controladas pelo número do quadro atual
+- Evite useEffect — os cálculos devem ser puros com base no quadro
