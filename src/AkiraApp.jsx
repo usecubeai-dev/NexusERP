@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { supabase, STRIPE_LINKS } from "./supabase.js";
 
 // ═══════════════════════════════════════════════
 // DESIGN TOKENS
@@ -1050,7 +1051,12 @@ const PlansScreen = () => (
           fontSize:13, fontWeight:700, cursor:"pointer",
           boxShadow: p.glow ? `0 0 20px rgba(34,197,94,0.35)` : "none",
         }}>
-          {p.name === "Gratuito" ? "Plano Atual" : `Assinar ${p.name}`}
+          {p.name === "Gratuito" ? "Plano Atual" : (
+            <a href={STRIPE_LINKS[p.name.toLowerCase()]} target="_blank" rel="noopener noreferrer"
+              style={{ color:"inherit", textDecoration:"none", width:"100%", display:"block" }}>
+              Assinar {p.name}
+            </a>
+          )}
         </button>
       </div>
     ))}
@@ -1271,10 +1277,35 @@ const ProfileScreen = ({ go, onSignOut }) => {
 // ═══════════════════════════════════════════════
 const WelcomeScreen = ({ onEnter }) => {
   const [view,     setView]     = useState("welcome");
+  const [name,     setName]     = useState("");
   const [email,    setEmail]    = useState("");
   const [pass,     setPass]     = useState("");
   const [showPass, setShowPass] = useState(false);
   const [remember, setRemember] = useState(true);
+  const [loading,  setLoading]  = useState(false);
+  const [error,    setError]    = useState("");
+
+  const handleLogin = async () => {
+    if (!email || !pass) return setError("Preencha e-mail e senha.");
+    setLoading(true); setError("");
+    const { error: e } = await supabase.auth.signInWithPassword({ email, password: pass });
+    setLoading(false);
+    if (e) return setError(e.message);
+    onEnter();
+  };
+
+  const handleSignup = async () => {
+    if (!name || !email || !pass) return setError("Preencha todos os campos.");
+    if (pass.length < 8) return setError("Senha deve ter mínimo 8 caracteres.");
+    setLoading(true); setError("");
+    const { error: e } = await supabase.auth.signUp({
+      email, password: pass,
+      options: { data: { full_name: name } },
+    });
+    setLoading(false);
+    if (e) return setError(e.message);
+    onEnter();
+  };
 
   const inputStyle = {
     width:"100%", background:"#111111", border:"1px solid #27272A",
@@ -1296,9 +1327,11 @@ const WelcomeScreen = ({ onEnter }) => {
     transition:"border-color 0.2s",
   };
 
-  const handleOAuth = (provider) => {
-    // Placeholder: integre com seu provedor de OAuth real
-    alert(`Login com ${provider} — integre com seu backend de autenticação.`);
+  const handleOAuth = async (provider) => {
+    await supabase.auth.signInWithOAuth({
+      provider: provider.toLowerCase(),
+      options: { redirectTo: window.location.href },
+    });
   };
 
   // ── WELCOME ──────────────────────────────────
@@ -1474,11 +1507,13 @@ const WelcomeScreen = ({ onEnter }) => {
             Esqueci a senha
           </span>
         </div>
-        <button style={{ ...btnPrimary, borderRadius:16 }} onClick={onEnter}>Entrar →</button>
+        {error && <div style={{ color:"#EF4444", fontSize:12, marginBottom:12, textAlign:"center" }}>{error}</div>}
+        <button style={{ ...btnPrimary, borderRadius:16, opacity: loading ? 0.7 : 1 }}
+          onClick={handleLogin} disabled={loading}>{loading ? "Entrando…" : "Entrar →"}</button>
         <div style={{ textAlign:"center", marginTop:20, fontSize:13, color:"#71717A" }}>
           Não tem conta?{" "}
           <span style={{ color:"#22C55E", fontWeight:600, cursor:"pointer" }}
-            onClick={() => setView("signup")}>Criar grátis</span>
+            onClick={() => { setError(""); setView("signup"); }}>Criar grátis</span>
         </div>
         <div style={{ height:8 }} />
       </div>
@@ -1530,14 +1565,15 @@ const WelcomeScreen = ({ onEnter }) => {
           Continuar com Apple
         </button>
         {[
-          { label:"Nome completo", placeholder:"Rafael Silva",         type:"text"     },
-          { label:"E-mail",        placeholder:"seu@email.com",        type:"email"    },
-          { label:"Senha",         placeholder:"Mínimo 8 caracteres",  type:"password" },
+          { label:"Nome completo", placeholder:"Rafael Silva",        type:"text",     val:name,  set:setName  },
+          { label:"E-mail",        placeholder:"seu@email.com",       type:"email",    val:email, set:setEmail },
+          { label:"Senha",         placeholder:"Mínimo 8 caracteres", type:"password", val:pass,  set:setPass  },
         ].map(f => (
           <div key={f.label} style={{ marginBottom:14 }}>
             <label style={{ fontSize:11, color:"#A1A1AA", display:"block",
               marginBottom:7, textTransform:"uppercase", letterSpacing:0.5 }}>{f.label}</label>
-            <input placeholder={f.placeholder} type={f.type} style={inputStyle} />
+            <input placeholder={f.placeholder} type={f.type} value={f.val}
+              onChange={e => f.set(e.target.value)} style={inputStyle} />
           </div>
         ))}
         <div style={{ marginBottom:20 }}>
@@ -1560,11 +1596,13 @@ const WelcomeScreen = ({ onEnter }) => {
             ))}
           </div>
         </div>
-        <button style={btnPrimary} onClick={onEnter}>Criar minha conta →</button>
+        {error && <div style={{ color:"#EF4444", fontSize:12, marginBottom:12, textAlign:"center" }}>{error}</div>}
+        <button style={{ ...btnPrimary, opacity: loading ? 0.7 : 1 }}
+          onClick={handleSignup} disabled={loading}>{loading ? "Criando conta…" : "Criar minha conta →"}</button>
         <div style={{ textAlign:"center", marginTop:16, marginBottom:8, fontSize:13, color:"#71717A" }}>
           Já tem conta?{" "}
           <span style={{ color:"#22C55E", fontWeight:600, cursor:"pointer" }}
-            onClick={() => setView("login")}>Entrar</span>
+            onClick={() => { setError(""); setView("login"); }}>Entrar</span>
         </div>
         <div style={{ height:8 }} />
       </div>
@@ -1687,6 +1725,17 @@ export default function App() {
   const [phase,  setPhase]  = useState("splash");
   const [active, setActive] = useState("home");
   const [notifCount]        = useState(3);
+
+  // Verifica sessão Supabase existente no carregamento
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) setPhase("app");
+    });
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
+      if (!session) setPhase("welcome");
+    });
+    return () => subscription.unsubscribe();
+  }, []);
 
   useEffect(() => {
     if (phase === "splash") {
