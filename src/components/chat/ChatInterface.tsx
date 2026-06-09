@@ -170,7 +170,7 @@ export default function ChatInterface() {
   };
 
   return (
-    <div className="flex h-screen bg-background overflow-hidden">
+    <div className="flex h-full bg-background overflow-hidden">
       {/* Sidebar */}
       <aside className="hidden md:flex flex-col w-72 border-r border-border/40 bg-card/50">
         {/* Sidebar Header */}

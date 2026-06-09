@@ -8,9 +8,11 @@ export const metadata = {
 
 export default function ChatPage() {
   return (
-    <>
+    <div className="flex flex-col h-screen overflow-hidden">
       <Navbar />
-      <ChatInterface />
-    </>
+      <div className="flex-1 pt-16 overflow-hidden">
+        <ChatInterface />
+      </div>
+    </div>
   );
 }
