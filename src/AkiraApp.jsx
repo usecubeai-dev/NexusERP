@@ -374,7 +374,7 @@ const escapeHtml = (s) =>
 const INIT_MSGS = [{
   role: "ai",
   time: "09:41",
-  text: "Olá! Sou a **Akira** 🦉, sua analista financeira com inteligência artificial.\n\nPosso analisar ações, FIIs, ETFs e simular seus investimentos. Como posso ajudar?",
+  text: "Olá! Sou a **Akira** 🦉, sua analista financeira com inteligência artificial.\n\nPosso analisar ações, FIIs, ETFs, comparar ativos e resumir o mercado. Como posso te ajudar?",
 }];
 
 const QUICK = ["Analise PETR4","Top FIIs 2025","SELIC vs CDB","Resumo do mercado"];
@@ -638,7 +638,7 @@ const runCalc = (init, monthly, months, annualRate) => {
 };
 
 const CalcScreen = () => {
-  const [vals, setVals] = useState({ init:10000, monthly:500, months:60, rate:12 });
+  const [vals, setVals] = useState({ init:1000, monthly:500, months:276, rate:12 });
   const [tab,  setTab]  = useState("chart");
   const [key,  setKey]  = useState(0);
 
